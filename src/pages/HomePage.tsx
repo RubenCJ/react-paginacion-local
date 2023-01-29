@@ -1,14 +1,25 @@
 import { ChangeEvent, useState } from 'react';
 import { Loading } from '../components/Loading';
+import { Pagination } from '../components/Pagination';
 import { usePokemon } from '../hooks/usePokemon'
 import { Pokemon } from '../interfaces/pokemonResponse';
 
 export const HomePage = () => {
 
     const {loading, pokemons } = usePokemon();
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pokemonPerPage] = useState(10);
     const [search, setSearch] = useState('');
 
+
+    const indexOfLastPokemon = currentPage * pokemonPerPage;
+    const indexOfFirstPokemon = indexOfLastPokemon - pokemonPerPage;
+    const currenPokemon = pokemons.slice(indexOfFirstPokemon, indexOfLastPokemon);
+    console.log('indexOfLastPokemon ', indexOfLastPokemon);
+    console.log('indexOfFirstPokemon ', indexOfFirstPokemon);
+    console.log('currenPokemon ', currenPokemon);
+
+    const paginate = (pageNumber : number) => setCurrentPage(pageNumber);
 
     const filteredPokemons = (): Pokemon[] => {
 
@@ -68,7 +79,7 @@ export const HomePage = () => {
             </thead>
             <tbody>
                 {
-                    filteredPokemons().map( ({id, name, pic}) => (
+                    currenPokemon.map( ({id, name, pic}) => (
                         <tr key={id}>
                             <td>{id}</td>
                             <td>{name}</td>
@@ -81,6 +92,7 @@ export const HomePage = () => {
                        
             </tbody>
         </table>
+        <Pagination pokemonPerPage={pokemonPerPage} totalPokemon={pokemons.length} />
         {
            loading && <Loading />
         }

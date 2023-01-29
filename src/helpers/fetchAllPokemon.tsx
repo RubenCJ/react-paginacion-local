@@ -5,12 +5,12 @@ export const fecthAllPokemon = async(): Promise<Pokemon[]> => {
 
     const resp = await pokemonApi.get<PokemonResponse>('/pokemon?limit=1500');
 
-    return transformfomPokemon(resp.data.results);
+    return transformPokemon(resp.data.results);
 
 }
 
 
-const transformfomPokemon = ( smallPokemonList : SmallPokemon[]): Pokemon[] => {
+const transformPokemon = ( smallPokemonList : SmallPokemon[]): Pokemon[] => {
  
     const pokemonList: Pokemon[] = smallPokemonList.map( p => {
 
